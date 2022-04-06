@@ -29,7 +29,7 @@ type SessionReponse = {
   refreshToken: string;
   roles: string[];
   permissions: string[];
-}
+};
 
 export const AuthContext = createContext({} as AuthContextData);
 
@@ -38,16 +38,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    const { 'nextauth.token': token } = parseCookies();
+    const { "nextauth.token": token } = parseCookies();
 
     if (token) {
-      api.get('/me').then(response => {
+      api.get("/me").then((response) => {
         const { email, permissions, roles } = response.data;
 
         setUser({
           email,
           permissions,
-          roles
+          roles,
         });
       });
     }
@@ -62,12 +62,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const { token, refreshToken, permissions, roles } = response.data;
 
-      setCookie(undefined, "nexthauth.token", token, {
+      setCookie(undefined, "nextauth.token", token, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
         path: "/",
       });
 
-      setCookie(undefined, "nexthauth.refreshToken", refreshToken, {
+      setCookie(undefined, "nextauth.refreshToken", refreshToken, {
         maxAge: 60 * 60 * 24 * 30, // 30 days
         path: "/",
       });
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         roles,
       });
 
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       Router.push("/dashboard");
     } catch (err) {
